@@ -13,6 +13,19 @@ public class Program1342 {
                 step++;
             }
         }
+        
+        /* Bitwise Solution */
+        step = 0;
+        while(num > 0){
+            if((num & 1)==0){
+                num >>= 1;
+                step++;
+            }else{
+                num--;
+                step++;
+            }
+        }
+        
         return step;
     }
 	
