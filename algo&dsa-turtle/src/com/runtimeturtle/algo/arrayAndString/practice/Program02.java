@@ -1,6 +1,7 @@
 package com.runtimeturtle.algo.arrayAndString.practice;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 /* Given an integer array nums sorted in non-decreasing order, 
  * return an array of the squares of each number sorted in non-decreasing order.
@@ -47,7 +48,7 @@ public class Program02 {
             }
         }
         
-        return sortedArray;  
+        return sortedArray;
     }
 
 }
