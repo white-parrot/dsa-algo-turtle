@@ -14,12 +14,40 @@ public class Program02 {
 	 */
     public int[] sortedSquares(int[] nums) {
  
+    	/* Simple Approach */
         for(int i = 0; i < nums.length; i++){
             nums[i] = nums[i]*nums[i];
         }
         
         Arrays.sort(nums);
-        return nums;    
+        // return nums;  
+        
+        /* Second Approach */
+        int capacity = nums.length;
+        int head = 0, trail = capacity-1, index = capacity - 1;
+        int[] sortedArray = new int[capacity];
+        
+        /**
+         * Take a head and trail pointer on array, find the square
+         * and compare, store the Bigger square at the end of output
+         * array (sortedArray). Decrease the index by 1
+         */
+        while(head <= trail){
+            int x = (int) Math.pow(nums[head], 2);
+            int y = (int) Math.pow(nums[trail],2);
+            
+            if(x > y){
+                sortedArray[index] = x;
+                index--;
+                head++;
+            }else{
+                sortedArray[index] = y;
+                index--;
+                trail--;
+            }
+        }
+        
+        return sortedArray;  
     }
 
 }
