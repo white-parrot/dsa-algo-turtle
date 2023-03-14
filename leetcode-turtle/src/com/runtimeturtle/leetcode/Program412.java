@@ -3,6 +3,12 @@ package com.runtimeturtle.leetcode;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4424/
+ * {@link}https://leetcode.com/problems/fizz-buzz/
+ *
+ * @author white-parrot
+ */
 public class Program412 {
 
     public List<String> fizzBuzz(int n) {

@@ -1,8 +1,9 @@
 package com.runtimeturtle.leetcode;
 
 /**
- * Definition for a binary tree node.
- * @author pandeys3
+ * {@link}https://leetcode.com/problems/add-two-integers/
+ *
+ * @author white-parrot
  */
 class TreeNode {
      int val;

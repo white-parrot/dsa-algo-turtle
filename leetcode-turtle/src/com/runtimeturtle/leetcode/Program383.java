@@ -2,6 +2,12 @@ package com.runtimeturtle.leetcode;
 
 import java.util.Arrays;
 
+/**
+ * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4427/
+ * {@link}https://leetcode.com/problems/ransom-note/
+ *
+ * @author white-parrot
+ */
 public class Program383 {
 
 	public boolean canConstruct(String ransomNote, String magazine) {

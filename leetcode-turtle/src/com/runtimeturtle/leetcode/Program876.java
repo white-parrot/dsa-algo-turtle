@@ -9,7 +9,13 @@ class ListNode {
      ListNode(int val) { this.val = val; }
      ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  }
- public class Program876 {
+/**
+ * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4426/
+ * {@link}https://leetcode.com/problems/middle-of-the-linked-list/
+ *
+ * @author white-parrot
+ */
+public class Program876 {
 
     public ListNode middleNode(ListNode head) {
         ListNode midNode = head;

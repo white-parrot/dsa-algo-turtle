@@ -1,5 +1,11 @@
 package com.runtimeturtle.leetcode;
 
+/**
+ * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4422/
+ * {@link https://leetcode.com/problems/running-sum-of-1d-array/
+ *
+ * @author white-parrot
+ */
 public class Program1480 {
 
     public int[] runningSum(int[] nums) {

@@ -1,5 +1,11 @@
 package com.runtimeturtle.leetcode;
 
+/**
+ * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4423/
+ * {@link}https://leetcode.com/problems/richest-customer-wealth/
+ *
+ * @author white-parrot
+ */
 public class Program1672 {
 
     int maxBalance = -1;

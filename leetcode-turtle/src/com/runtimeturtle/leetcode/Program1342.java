@@ -1,5 +1,11 @@
 package com.runtimeturtle.leetcode;
 
+/**
+ * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4425/
+ * {@link}https://leetcode.com/problems/number-of-steps-to-reduce-a-number-to-zero/
+ *
+ * @author white-parrot
+ */
 public class Program1342 {
 
     public int numberOfSteps(int num) {
