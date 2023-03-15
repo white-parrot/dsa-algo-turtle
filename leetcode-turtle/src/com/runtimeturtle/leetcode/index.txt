@@ -34,3 +34,4 @@ ARRAY 101 - In-Place Operations
 
 ARRAY 101 - Conclusion
 023: Program3228 : https://leetcode.com/explore/featured/card/fun-with-arrays/523/conclusion/3228/ : https://leetcode.com/problems/height-checker/
+024: Program3230 : https://leetcode.com/explore/featured/card/fun-with-arrays/523/conclusion/3230/ : https://leetcode.com/problems/max-consecutive-ones-ii/
