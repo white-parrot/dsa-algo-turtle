@@ -35,3 +35,6 @@ ARRAY 101 - In-Place Operations
 ARRAY 101 - Conclusion
 023: Program3228 : https://leetcode.com/explore/featured/card/fun-with-arrays/523/conclusion/3228/ : https://leetcode.com/problems/height-checker/
 024: Program3230 : https://leetcode.com/explore/featured/card/fun-with-arrays/523/conclusion/3230/ : https://leetcode.com/problems/max-consecutive-ones-ii/
+025: Program3231 	: https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3231/ : https://leetcode.com/problems/third-maximum-number/
+026: Program3574	: https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3574/ : https://leetcode.com/problems/squares-of-a-sorted-array/
+027: Program3270	: https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3270/ :  https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/
