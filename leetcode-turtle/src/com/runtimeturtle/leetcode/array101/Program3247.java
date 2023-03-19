@@ -1,4 +1,4 @@
-package com.runtimeturtle.leetcode;
+package com.runtimeturtle.leetcode.array101;
 
 /**
  * {@link}https://leetcode.com/explore/learn/card/fun-with-arrays/526/deleting-items-from-an-array/3247/

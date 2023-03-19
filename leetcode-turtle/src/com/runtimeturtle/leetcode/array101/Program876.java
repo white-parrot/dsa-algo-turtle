@@ -1,4 +1,4 @@
-package com.runtimeturtle.leetcode;
+package com.runtimeturtle.leetcode.array101;
 
 
 /* Definition for singly-linked list.*/

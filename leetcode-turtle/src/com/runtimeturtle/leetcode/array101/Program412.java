@@ -1,4 +1,4 @@
-package com.runtimeturtle.leetcode;
+package com.runtimeturtle.leetcode.array101;
 
 import java.util.ArrayList;
 import java.util.List;

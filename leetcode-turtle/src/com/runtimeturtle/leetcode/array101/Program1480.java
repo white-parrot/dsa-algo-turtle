@@ -1,4 +1,4 @@
-package com.runtimeturtle.leetcode;
+package com.runtimeturtle.leetcode.array101;
 
 /**
  * {@link}https://leetcode.com/explore/featured/card/the-leetcode-beginners-guide/692/challenge-problems/4422/

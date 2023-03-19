@@ -1,4 +1,4 @@
-package com.runtimeturtle.leetcode;
+package com.runtimeturtle.leetcode.array101;
 
 /**
  * {@link}https://leetcode.com/explore/featured/card/fun-with-arrays/523/conclusion/3230/ 

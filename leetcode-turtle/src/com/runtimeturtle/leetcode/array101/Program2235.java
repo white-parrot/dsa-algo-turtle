@@ -1,4 +1,4 @@
-package com.runtimeturtle.leetcode;
+package com.runtimeturtle.leetcode.array101;
 
 /**
  * {@link}https://leetcode.com/problems/add-two-integers/
