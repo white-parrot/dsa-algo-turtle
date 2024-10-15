@@ -18,7 +18,7 @@ Algorithms and DSA Demystification.
 ### Recursion (Backtracking)
 + [Binary Combinations: Generating all the combination of Bits of size n from the given bit array of length n](https://github.com/white-parrot/dsa-algo-turtle/blob/master/algo%26dsa-turtle/src/com/runtimeturtle/algo/recursion/PintAllTheCombinationOfNBits.java)   :eight_pointed_black_star:
 + [Sub Array: Generating all the Sub-Array of Length n from the Given array of Legth K](https://github.com/white-parrot/dsa-algo-turtle/blob/master/algo%26dsa-turtle/src/com/runtimeturtle/algo/recursion/FindAllTheSubArrayOfLengthNFromArrayOfLengthK.java)   :eight_pointed_black_star:
-+ Generating k – ary Strings
++ Finding the length of connected cells of 1s (regions) in an matrix of Os and 1s
 + N-Queens Problem
 + The Knapsack Problem
 + Generalized Strings
