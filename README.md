@@ -4,6 +4,7 @@ Algorithms and DSA Demystification.
 ## Algorithms
 ### Recursion : 
 + Print n numbers in backward direction using recursion
++ Print n numbers in forward direction using recursion
 + Print Fibonacci series of n terms using recursion
 + Find the nth Factorial using recursion
 + Tower of Hanoi Puzzle
