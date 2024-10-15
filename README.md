@@ -2,6 +2,7 @@
 Algorithms and DSA Demystification.
 
 ## Algorithms
+:eight_pointed_black_star: Standard Algorithm to Remember. [Hard to Understand]
 ### Recursion : 
 + [Print n numbers in backward direction using recursion](https://github.com/white-parrot/dsa-algo-turtle/blob/master/algo%26dsa-turtle/src/com/runtimeturtle/algo/recursion/PrintTheNumbersInBackwardDirection.java)
 + [Print n numbers in forward direction using recursion](https://github.com/white-parrot/dsa-algo-turtle/blob/master/algo%26dsa-turtle/src/com/runtimeturtle/algo/recursion/PrintTheNumbersInForwardDirection.java)
@@ -14,8 +15,9 @@ Algorithms and DSA Demystification.
 + Tree Traversals and many Tree Problems: InOrder, PreOrder PostOrder
 + Graph Traversals: DFS [Depth First Search] and BFS [Breadth First Search]
   
-### Backtracking
-+ Binary Strings: generating all binary strings
+### Recursion (Backtracking)
++ [Binary Combinations: Generating all the combination of Bits of size n from the given array of bits of length n](https://github.com/white-parrot/dsa-algo-turtle/blob/master/algo%26dsa-turtle/src/com/runtimeturtle/algo/recursion/PintAllTheCombinationOfNBits.java)   :eight_pointed_black_star:
++ [Sub Array: Generating all the Sub-Array of Length n from the Given array of Legth K](https://github.com/white-parrot/dsa-algo-turtle/blob/master/algo%26dsa-turtle/src/com/runtimeturtle/algo/recursion/FindAllTheSubArrayOfLengthNFromArrayOfLengthK.java)   :eight_pointed_black_star:
 + Generating k – ary Strings
 + N-Queens Problem
 + The Knapsack Problem
