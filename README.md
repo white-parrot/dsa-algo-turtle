@@ -6,3 +6,6 @@ Algorithms and DSA Demystification.
 1. https://leetcode.com/problems/range-sum-query-immutable/description/
 2. https://leetcode.com/problems/find-pivot-index/description/
 ### 🌻b. Carry Forward Technique
+
+## 2. Binary Search Techniques:
+1. https://leetcode.com/problems/arranging-coins/description/
