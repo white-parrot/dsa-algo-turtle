@@ -12,4 +12,4 @@ Algorithms and DSA Demystification.
 
 ## 3. Binary Search on Answer:
 1. Painter's Problem: https://github.com/white-parrot/dsa-algo-turtle/blob/master/301-Binary-Search-on-Answer_Painters-Problem.md
-2. 
+2. Koko Eating Bananas: https://leetcode.com/problems/koko-eating-bananas/description/
