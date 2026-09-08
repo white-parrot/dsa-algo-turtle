@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Mastery — Route Tracker</title>
+<style>
+  :root{
+    --ink:#14171a;
+    --panel:#1c2126;
+    --panel-2:#232a30;
+    --line:#39424a;
+    --text:#e9e6df;
+    --muted:#9aa4ab;
+    --route:#c98a3e;
+    --route-dim:#5b4a34;
+    --done:#4f9d92;
+    --focus:#e0c48c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    display:flex;
+    min-height:100vh;
+  }
+  h1,h2,h3,.mono{
+    font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    letter-spacing:0.02em;
+  }
+  /* Sidebar: the ascent route */
+  #route{
+    width:260px;
+    min-width:220px;
+    background:var(--panel);
+    border-right:1px solid var(--line);
+    padding:24px 0 24px 0;
+    overflow-y:auto;
+  }
+  #route h1{
+    font-size:15px;
+    color:var(--route);
+    margin:0 20px 4px 20px;
+    text-transform:uppercase;
+  }
+  #route .sub{
+    margin:0 20px 20px 20px;
+    color:var(--muted);
+    font-size:12px;
+  }
+  .route-item{
+    position:relative;
+    padding:10px 20px 10px 34px;
+    cursor:pointer;
+    font-size:13px;
+    color:var(--muted);
+    border-left:2px solid var(--route-dim);
+    margin-left:20px;
+  }
+  .route-item:last-child{border-left:2px solid transparent;}
+  .route-item .marker{
+    position:absolute;
+    left:-7px;
+    top:12px;
+    width:12px;height:12px;
+    border-radius:50%;
+    background:var(--panel-2);
+    border:2px solid var(--route-dim);
+  }
+  .route-item.done .marker{background:var(--done);border-color:var(--done);}
+  .route-item.active{color:var(--focus);background:var(--panel-2);}
+  .route-item.active .marker{border-color:var(--focus);}
+  .route-item .est{display:block;font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* Main content */
+  #main{flex:1;padding:32px 40px;max-width:900px;}
+  #progress-wrap{margin-bottom:28px;}
+  #progress-label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  #progress-bar{height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden;}
+  #progress-fill{height:100%;background:linear-gradient(90deg,var(--route),var(--focus));width:0%;transition:width .3s;}
+  #problems-label{font-size:12.5px;color:var(--muted);margin-top:8px;}
+  #problems-label span{color:var(--focus);font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;}
+  #save-controls{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;}
+  #connect-status{font-size:12px;color:var(--muted);}
+  .tracker-btn{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    font-size:12.5px;
+    padding:7px 12px;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .tracker-btn:hover{border-color:var(--route);color:var(--focus);}
+
+  .phase-header{margin-bottom:6px;}
+  .phase-header h2{font-size:22px;margin:0;color:var(--text);}
+  .phase-header .patterns{color:var(--muted);font-size:13px;margin-top:4px;}
+
+  .day-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:16px 18px;
+    margin:16px 0;
+  }
+  .day-card.checked{border-color:var(--done);}
+  .day-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;}
+  .day-title input{width:16px;height:16px;accent-color:var(--done);}
+  .day-body{margin-top:10px;font-size:13.5px;line-height:1.55;color:var(--text);}
+  .day-body b{color:var(--focus);}
+  .links a{color:var(--route);text-decoration:none;display:block;margin-top:4px;font-size:13px;}
+  .links a:hover{text-decoration:underline;}
+
+  .placeholder{
+    color:var(--muted);
+    font-size:13.5px;
+    background:var(--panel);
+    border:1px dashed var(--line);
+    border-radius:6px;
+    padding:16px 18px;
+    margin-top:16px;
+  }
+  .note{color:var(--muted);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px;}
+  a:focus-visible, .route-item:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav id="route" aria-label="Phase route">
+  <h1>DSA Mastery</h1>
+  <div class="sub">18 phases · ~1 hr/day · Python</div>
+  <div id="route-list"></div>
+</nav>
+
+<main id="main">
+  <div id="progress-wrap">
+    <div id="progress-label"><span>Overall route progress</span><span id="progress-pct">0%</span></div>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <div id="problems-label">Problems tackled: <span id="problems-pct">0 / 0</span></div>
+    <div id="save-controls">
+      <button id="connect-btn" class="tracker-btn" type="button">🔗 Connect progress file</button>
+      <span id="connect-status" class="mono"></span>
+    </div>
+  </div>
+  <div id="phase-content"></div>
+  <div class="note">First time only: click <b>Connect progress file</b> and pick or create a file (e.g. <span class="mono">dsa-progress.json</span>) anywhere you like — your project folder works well. After that, every checkbox you tick writes to that file automatically, and reopening this page reloads it automatically too — no further clicks needed, as long as you keep using the same browser profile. That one initial click can't be skipped — no website is allowed to silently touch your disk — and if the browser ever asks you to reconfirm access after time away, that's normal; just click the button again. Requires Chrome or Edge (this API isn't supported in Firefox/Safari yet). Detail for phases beyond 0 gets added to this file as you unlock them.</div>
+</main>
+
+<script>
+const PHASES = [
+  {id:0, name:"Python for DSA", est:6, patterns:"syntax, lists/dicts/sets, strings, functions, recursion, quick OOP",
+    days:[
+      {t:"Day 1 — Setup, I/O, Core Types", c:"Variables, input()/print(), int/float/str/bool, f-strings, why no main().",
+       p:"Reading input for DSA problems.",
+       links:[["Two Sum","https://leetcode.com/problems/two-sum/"],["Second Largest (GFG)","https://www.geeksforgeeks.org/problems/second-largest3735/1"]]},
+      {t:"Day 2 — Lists (Java ArrayList)", c:"Indexing, negative indexing, slicing, append/pop/insert/remove, list comprehensions.",
+       p:"\"Build a list\" via comprehension vs Java loop+add.",
+       links:[["Remove Duplicates from Sorted Array","https://leetcode.com/problems/remove-duplicates-from-sorted-array/"],["Merge Sorted Array","https://leetcode.com/problems/merge-sorted-array/"],["Reverse an Array (GFG)","https://www.geeksforgeeks.org/problems/reverse-an-array/1"]]},
+      {t:"Day 3 — Dicts & Sets (Java HashMap/HashSet)", c:"dict access/.get(), in for O(1) lookup, set ops, Counter, defaultdict.",
+       p:"Frequency counting — the most common DSA opening move.",
+       links:[["Contains Duplicate","https://leetcode.com/problems/contains-duplicate/"],["Valid Anagram","https://leetcode.com/problems/valid-anagram/"],["Majority Element","https://leetcode.com/problems/majority-element/"]]},
+      {t:"Day 4 — Strings & Common Ops", c:"Immutability, slicing, split/strip, ord()/chr(), list+join build pattern.",
+       p:"Build-a-string efficiently idiom (never += in a loop).",
+       links:[["Reverse String","https://leetcode.com/problems/reverse-string/"],["Valid Palindrome","https://leetcode.com/problems/valid-palindrome/"],["Remove Duplicate Characters (GFG)","https://www.geeksforgeeks.org/problems/remove-duplicate-characters/1"]]},
+      {t:"Day 5 — Functions, Recursion Mechanics, Big-O Refresher", c:"def, default args, *args/**kwargs, recursion limit, Big-O refresher.",
+       p:"Base case + recursive case written explicitly before code.",
+       links:[["Fibonacci Number","https://leetcode.com/problems/fibonacci-number/"],["Factorial Trailing Zeroes","https://leetcode.com/problems/factorial-trailing-zeroes/"]]},
+      {t:"Day 6 — Quick OOP Bridge + Phase Review", c:"Minimal classes, __init__/self vs Java's this, LeetCode function-signature style.",
+       p:"Defining ListNode/TreeNode classes in 3 lines.",
+       links:[["Design Linked List","https://leetcode.com/problems/design-linked-list/"]]},
+    ]},
+  {id:1, name:"Array Foundations", est:10, patterns:"Big-O in practice, prefix sums, Kadane's, in-place tricks"},
+  {id:2, name:"Two Pointers & Sliding Window", est:10, patterns:"fixed/variable window, fast-slow pointers"},
+  {id:3, name:"Hashing", est:8, patterns:"frequency maps, dedup, grouping"},
+  {id:4, name:"Recursion & Backtracking", est:12, patterns:"subsets, permutations, combinations, pruning"},
+  {id:5, name:"Sorting & Binary Search", est:12, patterns:"sort intuition, binary search on answer, rotated arrays"},
+  {id:6, name:"Linked Lists", est:10, patterns:"reversal, cycle detection, merge, fast-slow"},
+  {id:7, name:"Stacks & Queues", est:10, patterns:"monotonic stack, next-greater, min-stack"},
+  {id:8, name:"Trees", est:14, patterns:"traversals, BST properties, LCA, tree DP intro"},
+  {id:9, name:"Heaps / Priority Queues", est:8, patterns:"k-way merge, top-K, median-finder"},
+  {id:10, name:"Graphs", est:18, patterns:"BFS/DFS, Union-Find, topo sort, Dijkstra/Bellman-Ford"},
+  {id:11, name:"Greedy", est:8, patterns:"interval scheduling, exchange-argument, greedy-vs-DP"},
+  {id:12, name:"Dynamic Programming", est:24, patterns:"1D→2D, knapsack, LIS, interval DP, tree/graph DP, bitmask DP"},
+  {id:13, name:"Tries & String Algorithms", est:8, patterns:"Trie, KMP/Z-algorithm, string hashing"},
+  {id:14, name:"Bit Manipulation", est:6, patterns:"XOR tricks, bitmasking, subsets via bits"},
+  {id:15, name:"Advanced CP Data Structures", est:10, patterns:"Segment Tree, Fenwick/BIT, Sparse Table, advanced DSU"},
+  {id:16, name:"Math & Number Theory for CP", est:8, patterns:"modular arithmetic, sieve, GCD/LCM, combinatorics"},
+  {id:17, name:"Contest Craft", est:0, patterns:"fast I/O templates, constraint-reading, virtual contests — woven in weekly from Phase 3"},
+  {id:18, name:"Interview + Profile Sustain", est:0, patterns:"mock interviews, company sets, revision cadence — woven in weekly from Day 1"},
+];
+
+// Sequential numbering across every problem link, in PHASES order —
+// so "1. Two Sum", "2. Second Largest", etc. keep counting up as later phases get detail added.
+const PROBLEM_NUMBERS = {};
+(function assignProblemNumbers(){
+  let n = 0;
+  PHASES.forEach(phase=>{
+    if(!phase.days) return;
+    phase.days.forEach((day,i)=>{
+      day.links.forEach((link,j)=>{
+        n++;
+        PROBLEM_NUMBERS[phase.id+'-'+i+'-'+j] = n;
+      });
+    });
+  });
+})();
+
+let checked = {}; // kept in memory only, this session — use Save/Load progress to persist across refreshes
+let activePhaseId = 0;
+
+function totalDays(){return PHASES.reduce((s,p)=>s+p.est,0);}
+function doneDays(){
+  let n=0;
+  for(const k in checked) if(checked[k]) n++;
+  return n;
+}
+function totalProblems(){
+  let n=0;
+  PHASES.forEach(p=>{
+    if(!p.days) return;
+    p.days.forEach(day=>{ n += day.links.length; });
+  });
+  return n;
+}
+function solvedProblems(){
+  let n=0;
+  PHASES.forEach(p=>{
+    if(!p.days) return;
+    p.days.forEach((day,i)=>{
+      if(checked[p.id+'-'+i]) n += day.links.length;
+    });
+  });
+  return n;
+}
+function updateProgress(){
+  const t = totalDays();
+  const d = doneDays();
+  const pct = t ? Math.round((d/t)*100) : 0;
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-pct').textContent = pct+'% ('+d+'/'+t+' days)';
+
+  document.getElementById('problems-pct').textContent = solvedProblems()+' / '+totalProblems();
+}
+
+function phaseCompleteCount(phase){
+  if(!phase.days) return 0;
+  return phase.days.filter((_,i)=>checked[phase.id+'-'+i]).length;
+}
+
+function renderRoute(activeId){
+  const list = document.getElementById('route-list');
+  list.innerHTML = '';
+  PHASES.forEach(p=>{
+    const div = document.createElement('div');
+    const doneCt = phaseCompleteCount(p);
+    const isFull = p.days && doneCt === p.days.length;
+    div.className = 'route-item' + (p.id===activeId?' active':'') + (isFull?' done':'');
+    div.tabIndex = 0;
+    div.innerHTML = '<span class="marker"></span>Phase '+p.id+' — '+p.name+
+      '<span class="est">'+(p.est?p.est+' days':'ongoing')+(p.days?' · '+doneCt+'/'+p.days.length+' done':'')+'</span>';
+    div.onclick = ()=>renderPhase(p.id);
+    div.onkeypress = (e)=>{if(e.key==='Enter') renderPhase(p.id);};
+    list.appendChild(div);
+  });
+}
+
+function renderPhase(id){
+  activePhaseId = id;
+  const phase = PHASES.find(p=>p.id===id);
+  const content = document.getElementById('phase-content');
+  content.innerHTML = '';
+
+  const header = document.createElement('div');
+  header.className = 'phase-header';
+  header.innerHTML = '<h2>Phase '+phase.id+' — '+phase.name+'</h2><div class="patterns">'+phase.patterns+'</div>';
+  content.appendChild(header);
+
+  if(phase.days){
+    phase.days.forEach((day,i)=>{
+      const key = phase.id+'-'+i;
+      const card = document.createElement('div');
+      card.className = 'day-card' + (checked[key]?' checked':'');
+      const linksHtml = day.links.map((l,j)=>{
+        const num = PROBLEM_NUMBERS[phase.id+'-'+i+'-'+j];
+        return '<a href="'+l[1]+'" target="_blank" rel="noopener">'+num+'. '+l[0]+' →</a>';
+      }).join('');
+      card.innerHTML =
+        '<div class="day-title"><input type="checkbox" data-key="'+key+'" '+(checked[key]?'checked':'')+'/> '+day.t+'</div>'+
+        '<div class="day-body"><b>Concept:</b> '+day.c+'<br><b>Pattern:</b> '+day.p+
+        '<div class="links">'+linksHtml+'</div></div>';
+      content.appendChild(card);
+    });
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'placeholder';
+    ph.textContent = 'Detail for this phase hasn\'t been generated yet. When you finish the phase before it and give the teach-back, ask for "DSA-Phase' + phase.id + '" detail and it gets added here, day by day, same as Phase 0.';
+    content.appendChild(ph);
+  }
+
+  content.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', (e)=>{
+      checked[e.target.dataset.key] = e.target.checked;
+      updateProgress();
+      renderRoute(id);
+      renderPhase(id);
+      writeToHandle();
+    });
+  });
+}
+
+// --- Auto-save/load to a real file, via the File System Access API (Chrome/Edge only) ---
+let fileHandle = null;
+
+function idbGet(key){
+  return new Promise((resolve)=>{
+    const req = indexedDB.open('dsa-tracker-db', 1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore('kv'); };
+    req.onsuccess = ()=>{
+      const tx = req.result.transaction('kv','readonly');
+      const g = tx.objectStore('kv').get(key);
+      g.onsuccess = ()=>resolve(g.result || null);
+      g.onerror = ()=>resolve(null);
+    };
+    req.onerror = ()=>resolve(null);
+  });
+}
+function idbSet(key, value){
+  return new Promise((resolve)=>{
+    const req = indexedDB.open('dsa-tracker-db', 1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore('kv'); };
+    req.onsuccess = ()=>{
+      const tx = req.result.transaction('kv','readwrite');
+      tx.objectStore('kv').put(value, key);
+      tx.oncomplete = ()=>resolve(true);
+      tx.onerror = ()=>resolve(false);
+    };
+    req.onerror = ()=>resolve(false);
+  });
+}
+
+function setConnectUI(state){
+  const btn = document.getElementById('connect-btn');
+  const status = document.getElementById('connect-status');
+  if(state==='connected'){
+    btn.textContent = '🔄 Use a different file';
+    status.textContent = 'Auto-saving to ' + (fileHandle && fileHandle.name ? fileHandle.name : 'progress file');
+  } else if(state==='needs-reconnect'){
+    btn.textContent = '🔓 Reconnect progress file';
+    status.textContent = 'Click once to resume auto-save (browser needs to reconfirm access).';
+  } else if(state==='unsupported'){
+    btn.style.display = 'none';
+    status.textContent = 'Auto-connect needs Chrome or Edge — not supported in this browser.';
+  } else {
+    btn.textContent = '🔗 Connect progress file';
+    status.textContent = 'Pick or create a file once — after that, progress auto-saves with no more clicks.';
+  }
+}
+
+async function loadFromHandle(handle){
+  try{
+    const file = await handle.getFile();
+    const text = await file.text();
+    if(text.trim()){
+      const parsed = JSON.parse(text);
+      checked = parsed.checked || {};
+    }
+  }catch(e){
+    checked = {}; // new/empty file, nothing to load yet
+  }
+  updateProgress();
+  renderRoute(activePhaseId);
+  renderPhase(activePhaseId);
+}
+
+async function writeToHandle(){
+  if(!fileHandle) return;
+  try{
+    const writable = await fileHandle.createWritable();
+    await writable.write(JSON.stringify({checked:checked, savedAt:new Date().toISOString()}, null, 2));
+    await writable.close();
+  }catch(e){
+    console.error('Auto-save failed:', e);
+  }
+}
+
+async function connectFile(){
+  try{
+    const handle = await window.showSaveFilePicker({
+      suggestedName:'dsa-progress.json',
+      types:[{description:'DSA tracker progress', accept:{'application/json':['.json']}}]
+    });
+    fileHandle = handle;
+    await idbSet('progressHandle', handle);
+    await loadFromHandle(handle);
+    setConnectUI('connected');
+  }catch(err){
+    // user cancelled the picker — no-op
+  }
+}
+
+document.getElementById('connect-btn').addEventListener('click', async ()=>{
+  if(fileHandle){
+    const perm = await fileHandle.queryPermission({mode:'readwrite'});
+    if(perm !== 'granted'){
+      const req = await fileHandle.requestPermission({mode:'readwrite'});
+      if(req === 'granted'){
+        await loadFromHandle(fileHandle);
+        setConnectUI('connected');
+        return;
+      }
+    }
+  }
+  await connectFile();
+});
+
+async function initAutoSave(){
+  if(!('showSaveFilePicker' in window)){
+    setConnectUI('unsupported');
+    return;
+  }
+  const stored = await idbGet('progressHandle');
+  if(stored){
+    fileHandle = stored;
+    const perm = await fileHandle.queryPermission({mode:'readwrite'});
+    if(perm === 'granted'){
+      await loadFromHandle(fileHandle);
+      setConnectUI('connected');
+    } else {
+      setConnectUI('needs-reconnect');
+    }
+  } else {
+    setConnectUI('disconnected');
+  }
+}
+
+renderRoute(0);
+renderPhase(0);
+updateProgress();
+initAutoSave();
+</script>
+</body>
+</html>
